@@ -1,0 +1,5 @@
+# Streamlit app image
+-r requirements-api.txt
+streamlit==1.66.1
+plotly==7.1.0
+requests==2.34.2

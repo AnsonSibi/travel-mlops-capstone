@@ -1,0 +1,22 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# runtime output
+logs/
+data/processed/
+airflow/logs/
+airflow/plugins/
+airflow/config/
+
+# MLflow local store (kept out of git - reproduce with `make train`)
+mlruns/
+mlflow.db
+
+.DS_Store
+.env
+src/*.egg-info/

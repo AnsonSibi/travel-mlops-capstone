@@ -1,0 +1,10 @@
+# Minimal serving dependencies for the Flask API image
+pandas==3.1.0
+numpy==2.5.4
+scikit-learn==1.9.1
+joblib==1.6.0
+Flask==3.1.3
+gunicorn==26.2.0
+prometheus_client==0.26.0
+# models retrained inside Airflow are pickled with dill hooks active, so serving needs it too
+dill==0.4.1
