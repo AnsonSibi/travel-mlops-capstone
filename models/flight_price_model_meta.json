@@ -1,0 +1,339 @@
+{
+  "model_name": "hist_gradient_boosting",
+  "mlflow_run_id": "1ac2ee0a41394c2db8afaa02cb4a56f7",
+  "registered_model": "flight-price-regressor",
+  "metrics": {
+    "rmse": 0.000456725354524897,
+    "mae": 0.00032834702240252677,
+    "r2": 0.9999999999984169,
+    "mape": 4.182273407397288e-07,
+    "unseen_route_rmse": 181.35062323834424,
+    "unseen_route_r2": 0.736083048746521
+  },
+  "trained_at": "2026-10-27T02:57:39+00:00",
+  "features": [
+    "from",
+    "to",
+    "flightType",
+    "agency",
+    "time",
+    "distance",
+    "date"
+  ],
+  "allowed_values": {
+    "from": [
+      "Aracaju (SE)",
+      "Brasilia (DF)",
+      "Campo Grande (MS)",
+      "Florianopolis (SC)",
+      "Natal (RN)",
+      "Recife (PE)",
+      "Rio de Janeiro (RJ)",
+      "Salvador (BH)",
+      "Sao Paulo (SP)"
+    ],
+    "to": [
+      "Aracaju (SE)",
+      "Brasilia (DF)",
+      "Campo Grande (MS)",
+      "Florianopolis (SC)",
+      "Natal (RN)",
+      "Recife (PE)",
+      "Rio de Janeiro (RJ)",
+      "Salvador (BH)",
+      "Sao Paulo (SP)"
+    ],
+    "flightType": [
+      "economic",
+      "firstClass",
+      "premium"
+    ],
+    "agency": [
+      "CloudFy",
+      "FlyingDrops",
+      "Rainbow"
+    ]
+  },
+  "routes": {
+    "Aracaju (SE)|Brasilia (DF)": {
+      "time": 1.11,
+      "distance": 425.98
+    },
+    "Aracaju (SE)|Campo Grande (MS)": {
+      "time": 1.69,
+      "distance": 650.1
+    },
+    "Aracaju (SE)|Florianopolis (SC)": {
+      "time": 2.1,
+      "distance": 808.85
+    },
+    "Aracaju (SE)|Natal (RN)": {
+      "time": 0.46,
+      "distance": 176.33
+    },
+    "Aracaju (SE)|Recife (PE)": {
+      "time": 1.44,
+      "distance": 555.74
+    },
+    "Aracaju (SE)|Rio de Janeiro (RJ)": {
+      "time": 1.55,
+      "distance": 597.61
+    },
+    "Aracaju (SE)|Salvador (BH)": {
+      "time": 2.16,
+      "distance": 830.86
+    },
+    "Aracaju (SE)|Sao Paulo (SP)": {
+      "time": 1.02,
+      "distance": 392.76
+    },
+    "Brasilia (DF)|Aracaju (SE)": {
+      "time": 1.11,
+      "distance": 425.98
+    },
+    "Brasilia (DF)|Campo Grande (MS)": {
+      "time": 0.72,
+      "distance": 277.7
+    },
+    "Brasilia (DF)|Florianopolis (SC)": {
+      "time": 1.66,
+      "distance": 637.56
+    },
+    "Brasilia (DF)|Natal (RN)": {
+      "time": 1.43,
+      "distance": 550.69
+    },
+    "Brasilia (DF)|Recife (PE)": {
+      "time": 0.63,
+      "distance": 242.21
+    },
+    "Brasilia (DF)|Rio de Janeiro (RJ)": {
+      "time": 0.48,
+      "distance": 183.37
+    },
+    "Brasilia (DF)|Salvador (BH)": {
+      "time": 1.76,
+      "distance": 676.56
+    },
+    "Brasilia (DF)|Sao Paulo (SP)": {
+      "time": 0.67,
+      "distance": 257.81
+    },
+    "Campo Grande (MS)|Aracaju (SE)": {
+      "time": 1.69,
+      "distance": 650.1
+    },
+    "Campo Grande (MS)|Brasilia (DF)": {
+      "time": 0.72,
+      "distance": 277.7
+    },
+    "Campo Grande (MS)|Florianopolis (SC)": {
+      "time": 1.49,
+      "distance": 573.81
+    },
+    "Campo Grande (MS)|Natal (RN)": {
+      "time": 0.65,
+      "distance": 250.68
+    },
+    "Campo Grande (MS)|Recife (PE)": {
+      "time": 1.39,
+      "distance": 535.4
+    },
+    "Campo Grande (MS)|Rio de Janeiro (RJ)": {
+      "time": 2.09,
+      "distance": 806.48
+    },
+    "Campo Grande (MS)|Salvador (BH)": {
+      "time": 1.36,
+      "distance": 522.34
+    },
+    "Campo Grande (MS)|Sao Paulo (SP)": {
+      "time": 0.44,
+      "distance": 168.22
+    },
+    "Florianopolis (SC)|Aracaju (SE)": {
+      "time": 2.1,
+      "distance": 808.85
+    },
+    "Florianopolis (SC)|Brasilia (DF)": {
+      "time": 1.66,
+      "distance": 637.56
+    },
+    "Florianopolis (SC)|Campo Grande (MS)": {
+      "time": 1.49,
+      "distance": 573.81
+    },
+    "Florianopolis (SC)|Natal (RN)": {
+      "time": 1.84,
+      "distance": 709.37
+    },
+    "Florianopolis (SC)|Recife (PE)": {
+      "time": 1.76,
+      "distance": 676.53
+    },
+    "Florianopolis (SC)|Rio de Janeiro (RJ)": {
+      "time": 1.21,
+      "distance": 466.3
+    },
+    "Florianopolis (SC)|Salvador (BH)": {
+      "time": 2.44,
+      "distance": 937.77
+    },
+    "Florianopolis (SC)|Sao Paulo (SP)": {
+      "time": 1.46,
+      "distance": 562.14
+    },
+    "Natal (RN)|Aracaju (SE)": {
+      "time": 0.46,
+      "distance": 176.33
+    },
+    "Natal (RN)|Brasilia (DF)": {
+      "time": 1.43,
+      "distance": 550.69
+    },
+    "Natal (RN)|Campo Grande (MS)": {
+      "time": 0.65,
+      "distance": 250.68
+    },
+    "Natal (RN)|Florianopolis (SC)": {
+      "time": 1.84,
+      "distance": 709.37
+    },
+    "Natal (RN)|Recife (PE)": {
+      "time": 0.58,
+      "distance": 222.67
+    },
+    "Natal (RN)|Rio de Janeiro (RJ)": {
+      "time": 1.55,
+      "distance": 595.03
+    },
+    "Natal (RN)|Salvador (BH)": {
+      "time": 1.85,
+      "distance": 710.57
+    },
+    "Natal (RN)|Sao Paulo (SP)": {
+      "time": 0.85,
+      "distance": 327.55
+    },
+    "Recife (PE)|Aracaju (SE)": {
+      "time": 1.44,
+      "distance": 555.74
+    },
+    "Recife (PE)|Brasilia (DF)": {
+      "time": 0.63,
+      "distance": 242.21
+    },
+    "Recife (PE)|Campo Grande (MS)": {
+      "time": 1.39,
+      "distance": 535.4
+    },
+    "Recife (PE)|Florianopolis (SC)": {
+      "time": 1.76,
+      "distance": 676.53
+    },
+    "Recife (PE)|Natal (RN)": {
+      "time": 0.58,
+      "distance": 222.67
+    },
+    "Recife (PE)|Rio de Janeiro (RJ)": {
+      "time": 2.3,
+      "distance": 885.57
+    },
+    "Recife (PE)|Salvador (BH)": {
+      "time": 2.05,
+      "distance": 788.55
+    },
+    "Recife (PE)|Sao Paulo (SP)": {
+      "time": 1.26,
+      "distance": 486.52
+    },
+    "Rio de Janeiro (RJ)|Aracaju (SE)": {
+      "time": 1.55,
+      "distance": 597.61
+    },
+    "Rio de Janeiro (RJ)|Brasilia (DF)": {
+      "time": 0.48,
+      "distance": 183.37
+    },
+    "Rio de Janeiro (RJ)|Campo Grande (MS)": {
+      "time": 2.09,
+      "distance": 806.48
+    },
+    "Rio de Janeiro (RJ)|Florianopolis (SC)": {
+      "time": 1.21,
+      "distance": 466.3
+    },
+    "Rio de Janeiro (RJ)|Natal (RN)": {
+      "time": 1.55,
+      "distance": 595.03
+    },
+    "Rio de Janeiro (RJ)|Recife (PE)": {
+      "time": 2.3,
+      "distance": 885.57
+    },
+    "Rio de Janeiro (RJ)|Sao Paulo (SP)": {
+      "time": 0.86,
+      "distance": 331.89
+    },
+    "Salvador (BH)|Aracaju (SE)": {
+      "time": 2.16,
+      "distance": 830.86
+    },
+    "Salvador (BH)|Brasilia (DF)": {
+      "time": 1.76,
+      "distance": 676.56
+    },
+    "Salvador (BH)|Campo Grande (MS)": {
+      "time": 1.36,
+      "distance": 522.34
+    },
+    "Salvador (BH)|Florianopolis (SC)": {
+      "time": 2.44,
+      "distance": 937.77
+    },
+    "Salvador (BH)|Natal (RN)": {
+      "time": 1.85,
+      "distance": 710.57
+    },
+    "Salvador (BH)|Recife (PE)": {
+      "time": 2.05,
+      "distance": 788.55
+    },
+    "Salvador (BH)|Sao Paulo (SP)": {
+      "time": 1.04,
+      "distance": 401.66
+    },
+    "Sao Paulo (SP)|Aracaju (SE)": {
+      "time": 1.02,
+      "distance": 392.76
+    },
+    "Sao Paulo (SP)|Brasilia (DF)": {
+      "time": 0.67,
+      "distance": 257.81
+    },
+    "Sao Paulo (SP)|Campo Grande (MS)": {
+      "time": 0.44,
+      "distance": 168.22
+    },
+    "Sao Paulo (SP)|Florianopolis (SC)": {
+      "time": 1.46,
+      "distance": 562.14
+    },
+    "Sao Paulo (SP)|Natal (RN)": {
+      "time": 0.85,
+      "distance": 327.55
+    },
+    "Sao Paulo (SP)|Recife (PE)": {
+      "time": 1.26,
+      "distance": 486.52
+    },
+    "Sao Paulo (SP)|Rio de Janeiro (RJ)": {
+      "time": 0.86,
+      "distance": 331.89
+    },
+    "Sao Paulo (SP)|Salvador (BH)": {
+      "time": 1.04,
+      "distance": 401.66
+    }
+  }
+}
