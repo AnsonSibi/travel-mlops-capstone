@@ -1,0 +1,29 @@
+# Single-container Airflow for the capstone (api-server + scheduler + dag-processor
+# + triggerer via `airflow standalone`). Run from the repo root:
+#
+#   docker compose -f airflow/docker-compose.yaml up --build
+#   UI -> http://localhost:8080   (no login needed - all users are admins in this demo setup)
+#
+# The whole repo is mounted so DAG runs read data/raw and write models/, mlflow.db, reports/
+services:
+  airflow:
+    build:
+      context: ..
+      dockerfile: airflow/Dockerfile
+    image: travel-ml-airflow:latest
+    command: standalone
+    ports:
+      - "8080:8080"
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/project/airflow/dags
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "True"
+      MLFLOW_TRACKING_URI: sqlite:////opt/airflow/project/mlflow.db
+      MLFLOW_ARTIFACT_ROOT: file:///opt/airflow/project/mlruns
+      # optional CI/CD hand-off - Jenkins job URL used by deploy_new_model
+      JENKINS_DEPLOY_URL: ${JENKINS_DEPLOY_URL:-}
+      JENKINS_USER: ${JENKINS_USER:-}
+      JENKINS_TOKEN: ${JENKINS_TOKEN:-}
+    volumes:
+      - ..:/opt/airflow/project
+      - ./logs:/opt/airflow/logs
