@@ -1,0 +1,32 @@
+# Local stack: Flask API + Streamlit app
+#   docker compose up --build
+#   API        -> http://localhost:5000
+#   Streamlit  -> http://localhost:8501
+# (MLflow UI runs on the host: `make mlflow-ui` -> http://localhost:5001)
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    image: travel-ml-api:latest
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./logs:/app/logs          # prediction logs survive restarts and feed the drift check
+    restart: unless-stopped
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.streamlit
+    image: travel-ml-streamlit:latest
+    ports:
+      - "8501:8501"
+    environment:
+      API_URL: http://api:5000    # flight price tab calls the REST API
+    volumes:
+      - ./logs:/app/logs:ro
+    depends_on:
+      - api
+    restart: unless-stopped
+
