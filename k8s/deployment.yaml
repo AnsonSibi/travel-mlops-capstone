@@ -1,0 +1,65 @@
+# Flight price prediction API
+# Jenkins replaces the image tag on every build:
+#   kubectl -n travel-ml set image deployment/flight-price-api api=<registry>/travel-ml-api:<build>
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flight-price-api
+  namespace: travel-ml
+  labels:
+    app: flight-price-api
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5                   # lets us `kubectl rollout undo` to an older model
+  selector:
+    matchLabels:
+      app: flight-price-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0                     # zero-downtime model updates
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: flight-price-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "5000"
+    spec:
+      containers:
+        - name: api
+          image: travel-ml-api:latest
+          imagePullPolicy: IfNotPresent      # minikube: `minikube image load travel-ml-api:latest`
+          ports:
+            - containerPort: 5000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: travel-ml-config
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:                     # restart the pod if the process hangs
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:                    # only send traffic once the model is loaded
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: logs
+              mountPath: /app/logs
+      volumes:
+        - name: logs
+          emptyDir: {}

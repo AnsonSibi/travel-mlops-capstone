@@ -1,0 +1,17 @@
+# NodePort so the API is reachable from the host (minikube service flight-price-api -n travel-ml)
+apiVersion: v1
+kind: Service
+metadata:
+  name: flight-price-api
+  namespace: travel-ml
+  labels:
+    app: flight-price-api
+spec:
+  type: NodePort
+  selector:
+    app: flight-price-api
+  ports:
+    - name: http
+      port: 5000
+      targetPort: http
+      nodePort: 30500

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: travel-ml-config
+  namespace: travel-ml
+data:
+  LOG_LEVEL: "INFO"
+  PROJECT_ROOT: "/app"
+  # Streamlit talks to the API through its cluster-internal service name
+  API_URL: "http://flight-price-api:5000"
