@@ -9,6 +9,8 @@ Every `/predict` call appends a JSON line to `logs/predictions.jsonl` with a tim
 * `api_request_latency_seconds{endpoint}`: latency histogram
 * `flight_predicted_price`: histogram of predicted prices (a sudden shift is an early warning)
 
+Each gunicorn worker keeps its own counters, so one `/metrics` response covers only the worker that answered it.
+
 The pod template has `prometheus.io/scrape` annotations, so a Prometheus server in the cluster discovers the pods automatically.
 
 ## 3. Data drift (PSI)

@@ -2,9 +2,9 @@
 
 **Project:** End-to-End MLOps Capstone (Travel & Tourism)
 **Author:** Anson Sibi
-**Repository:** https://github.com/ansonsibi/travel-mlops-capstone
+**Repository:** https://github.com/AnsonSibi/travel-mlops-capstone
 
-This document explains how the flight price prediction model moves through each MLOps stage, from a trained model to a scaled, scheduled, continuously deployed and monitored service. Each section describes what the stage does, how it is implemented in the repository, and what the screenshot shows. The 📸 markers are where the screenshots go.
+This document explains how the flight price prediction model moves through each MLOps stage, from a trained model to a scaled, scheduled, continuously deployed and monitored service. Each section describes what the stage does, how it is implemented in the repository, and what was observed when it was run.
 
 ---
 
@@ -50,10 +50,10 @@ POST /predict
            "agency": "FlyingDrops", "time": 1.76, "distance": 676.53, "date": "10/27/2026"}}
 ```
 
-📸 *Screenshot 1a: Postman (or curl) single prediction with a 200 response.*
+📸 *Screenshot 1a: single prediction with curl (HTTP 200).*
 📸 *Screenshot 1b: batch prediction with a list of flights.*
-📸 *Screenshot 1c: validation error (e.g. invalid agency) returning 400.*
-📸 *Screenshot 1d: `/model-info` and `/metrics` responses.*
+📸 *Screenshot 1c: invalid requests are rejected with HTTP 400 and a clear message.*
+📸 *Screenshot 1d: `/model-info` response and Prometheus counters from `/metrics`.*
 
 ---
 
@@ -70,7 +70,7 @@ POST /predict
 📸 *Screenshot 2a: recommendations for an existing user (cards + history).*
 📸 *Screenshot 2b: cold-start recommendations for a new user with a budget filter.*
 📸 *Screenshot 2c: travel insights dashboard.*
-📸 *Screenshot 2d: flight price prediction via the API.*
+📸 *Screenshot 2d: flight price prediction served through the REST API.*
 📸 *Screenshot 2e: monitoring tab.*
 
 ---
@@ -92,8 +92,8 @@ docker run -d -p 5000:5000 --name travel-api travel-ml-api:latest
 docker compose up --build
 ```
 
-📸 *Screenshot 3a: `docker build` output finishing successfully.*
-📸 *Screenshot 3b: `docker images` / `docker ps` showing the running containers (healthy).*
+📸 *Screenshot 3a: end of the `docker build` output for the API image.*
+📸 *Screenshot 3b: images and running containers, both reported healthy.*
 📸 *Screenshot 3c: a prediction served by the container.*
 
 ---
@@ -116,14 +116,16 @@ docker compose up --build
 kubectl apply -f k8s/
 kubectl -n travel-ml get pods,svc,hpa
 kubectl -n travel-ml rollout status deployment/flight-price-api
-python scripts/simulate_traffic.py --url http://<minikube-ip>:30500 --n 5000 --workers 32   # load test
-kubectl -n travel-ml get hpa -w
+kubectl -n travel-ml run loadgen ...   # load generator pod: 16 threads posting batches to the Service
+kubectl -n travel-ml get hpa
 ```
 
-📸 *Screenshot 4a: `kubectl get pods,svc,hpa` with 2 running API pods.*
-📸 *Screenshot 4b: prediction through the NodePort / `minikube service` URL.*
-📸 *Screenshot 4c: HPA scaling up during the load test (replicas > 2).*
-📸 *Screenshot 4d: `kubectl rollout history` after a new deployment.*
+📸 *Screenshot 4a: pods, services and HPA right after deployment (2 API pods; CPU metrics not collected yet).*
+📸 *Screenshot 4b: readiness and a prediction through NodePort 30500.*
+**Load test result:** with a generator pod sending batches through the Service for about 4 minutes (32,076 requests of 200 flights each), average CPU rose to about 400% of the request, well over the 60% target. The HPA scaled the API from 2 to its maximum of 6 pods, and all 6 served traffic.
+
+📸 *Screenshot 4c: the HPA scaling from 2 to 6 replicas during the load test.*
+📸 *Screenshot 4d: rollout history after the Jenkins deployment, with the build recorded as the change cause.*
 
 ---
 
@@ -169,10 +171,12 @@ Reliability settings: retries with delay, execution timeouts, `max_active_runs=1
 10. **Deploy to Kubernetes**: `kubectl apply`, `set image` with the new tag, records the change cause and waits for `rollout status`.
 11. **Automatic rollback**: if the rollout fails, `kubectl rollout undo` restores the previous model.
 
-Triggers: a GitHub webhook on every push, and a remote trigger from the Airflow `deploy_new_model` task after a new champion is promoted.
+The job can be triggered by a GitHub webhook, or remotely by the Airflow `deploy_new_model` task once `JENKINS_DEPLOY_URL` is configured. The runs shown here were started manually.
 
-📸 *Screenshot 6a: Jenkins stage view with all stages green.*
-📸 *Screenshot 6b: test results (JUnit) and the quality gate log.*
+**The pipeline catching a real defect:** build #1 failed at Unit tests because `pytest` could not import the `api` package from the repository root. Every later stage was skipped, so nothing was deployed. After `pythonpath` was added to the pytest configuration, build #2 passed every stage and rolled out to Kubernetes in about 3 minutes.
+
+📸 *Screenshot 6a: stage view: build #1 stopped at Unit tests, build #2 passed. Retrain and Push are optional stages that were off.*
+📸 *Screenshot 6b: JUnit test report and the unit test and quality gate console output.*
 📸 *Screenshot 6c: console output of the deploy stage (`successfully rolled out`).*
 
 ---
@@ -186,8 +190,8 @@ Triggers: a GitHub webhook on every push, and a remote trigger from the Airflow 
 * The best run is registered in the **Model Registry** as `flight-price-regressor`. The **`@champion`** alias moves only when the new version beats the current champion's RMSE; otherwise the version is tagged **`@challenger`**.
 * The served model's run id is stored in `models/flight_price_model_meta.json` and returned by the API as `model_version`, so every prediction can be traced to its run.
 
-📸 *Screenshot 7a: experiment page comparing the 4 candidate runs (metrics columns).*
-📸 *Screenshot 7b: run comparison chart (test_rmse vs unseen_route_r2).*
+📸 *Screenshot 7a: experiment page with the candidate runs from three training rounds and their registered versions.*
+📸 *Screenshot 7b: metrics of the 4 candidate models compared side by side.*
 📸 *Screenshot 7c: a run's details: parameters, metrics, model artefact with signature.*
 📸 *Screenshot 7d: Model Registry: versions of `flight-price-regressor` with the `@champion` alias.*
 
@@ -196,11 +200,11 @@ Triggers: a GitHub webhook on every push, and a remote trigger from the Airflow 
 ## 8. Monitoring
 
 * **Operational:** Prometheus metrics at `/metrics` (request counts, errors, latency, predicted-price histogram); Kubernetes probes and restarts.
-* **Data drift:** PSI per feature between live inputs and the training distribution. In testing, normal traffic gave PSI < 0.06 on every feature, while skewed traffic (only long first-class trips) gave distance PSI ≈ 0.88 and triggered retraining.
+* **Data drift:** PSI per feature between live inputs and the training distribution. In testing, normal traffic gave PSI < 0.06 on every feature. After skewed traffic (only long first-class trips) distance PSI reached about 0.88 and the monitoring DAG triggered retraining.
 * **Model quality:** metrics of every retrain in MLflow, the Jenkins quality gate, and the Streamlit monitoring tab.
 
 📸 *Screenshot 8a: drift report JSON with `drift_detected: true`.*
-📸 *Screenshot 8b: `/metrics` output.*
+📸 *Screenshot 8b: Prometheus metrics from the API.*
 
 ---
 
