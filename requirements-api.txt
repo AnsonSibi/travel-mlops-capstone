@@ -8,3 +8,5 @@ gunicorn==26.2.0
 prometheus_client==0.26.0
 # models retrained inside Airflow are pickled with dill hooks active, so serving needs it too
 dill==0.4.1
+# pandas 3 keeps text columns in pyarrow, so the saved pipelines need it to load
+pyarrow==25.0.1
